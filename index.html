@@ -83,6 +83,65 @@
       box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
     }
 
+    /* Light Theme / High Visibility Mode */
+    body.light-theme {
+      background-color: #b0c4de;
+      color: #0f172a;
+    }
+
+    body.light-theme .scanlines {
+      opacity: 0.08;
+    }
+
+    body.light-theme .vignette {
+      display: none;
+    }
+
+    body.light-theme .top-bar {
+      background: linear-gradient(180deg, rgba(240, 246, 252, 0.92) 0%, rgba(240, 246, 252, 0) 100%);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.2);
+    }
+
+    body.light-theme .brand-title {
+      color: #097275;
+      text-shadow: none;
+    }
+
+    body.light-theme .sub-brand {
+      color: #334155;
+    }
+
+    body.light-theme .facility-alert {
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    body.light-theme .diagnostics-panel,
+    body.light-theme .network-panel {
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid #00f0d2;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    body.light-theme .bottom-bar {
+      background: linear-gradient(0deg, rgba(240, 246, 252, 0.92) 0%, rgba(240, 246, 252, 0) 100%);
+      border-top: 1px solid rgba(15, 23, 42, 0.2);
+    }
+
+    body.light-theme .objective-box {
+      background: rgba(15, 23, 42, 0.88);
+    }
+
+    body.light-theme .control-hints {
+      color: #1e293b;
+    }
+
+    body.light-theme .key {
+      background: #0f172a;
+      color: #00f0d2;
+      border: 1px solid #00f0d2;
+    }
+
     /* Top Navigation / Status Header */
     .top-bar {
       display: flex;
@@ -178,6 +237,87 @@
       display: flex;
       gap: 6px;
       align-items: center;
+    }
+
+    /* Multiplayer Network Panel */
+    .network-panel {
+      position: absolute;
+      top: 70px;
+      right: 16px;
+      background: rgba(6, 12, 18, 0.9);
+      border: 1px solid rgba(0, 240, 210, 0.3);
+      border-right: 3px solid #00f0d2;
+      padding: 10px 14px;
+      border-radius: 2px;
+      font-size: 11px;
+      min-width: 260px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .net-title {
+      color: #00f0d2;
+      font-weight: 700;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed rgba(0, 240, 210, 0.2);
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .net-status-badge {
+      font-size: 10px;
+      color: #8da4b4;
+    }
+    .net-status-badge.online { color: #00f0d2; }
+    .net-status-badge.live { color: #22ff88; font-weight: bold; }
+
+    .net-form-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .net-input {
+      background: rgba(12, 20, 28, 0.95);
+      border: 1px solid rgba(0, 240, 210, 0.3);
+      color: #ffffff;
+      padding: 4px 8px;
+      font-family: inherit;
+      font-size: 11px;
+      border-radius: 2px;
+      outline: none;
+      width: 100%;
+    }
+    .net-input:focus {
+      border-color: #00f0d2;
+      box-shadow: 0 0 6px rgba(0, 240, 210, 0.4);
+    }
+
+    .net-btn {
+      background: rgba(0, 240, 210, 0.15);
+      border: 1px solid #00f0d2;
+      color: #00f0d2;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 2px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .net-btn:hover {
+      background: #00f0d2;
+      color: #04090f;
+    }
+
+    .room-info-display {
+      margin-top: 6px;
+      padding: 6px;
+      background: rgba(10, 18, 24, 0.7);
+      border: 1px solid rgba(0, 240, 210, 0.15);
+      font-size: 11px;
     }
 
     .q-btn {
@@ -283,12 +423,45 @@
       width: 2px;
       height: 14px;
     }
+
+    /* Interaction Prompt overlay */
+    .interaction-prompt {
+      position: absolute;
+      top: 58%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(6, 12, 18, 0.92);
+      border: 1px solid #00f0d2;
+      box-shadow: 0 0 16px rgba(0, 240, 210, 0.4), inset 0 0 8px rgba(0, 240, 210, 0.2);
+      color: #ffffff;
+      padding: 8px 20px;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 20;
+      display: none;
+      text-transform: uppercase;
+      animation: promptGlow 1.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes promptGlow {
+      from { border-color: rgba(0, 240, 210, 0.6); box-shadow: 0 0 10px rgba(0, 240, 210, 0.3); }
+      to { border-color: rgba(0, 240, 210, 1.0); box-shadow: 0 0 22px rgba(0, 240, 210, 0.7); }
+    }
+
+    @keyframes recBlink {
+      0% { opacity: 0.2; transform: scale(0.9); }
+      100% { opacity: 1.0; transform: scale(1.1); }
+    }
   </style>
 </head>
-<body>
+<body class="light-theme">
   <div class="scanlines"></div>
   <div class="vignette"></div>
   <div class="reticle"></div>
+  <div id="interaction-prompt" class="interaction-prompt"></div>
 
   <canvas id="webgl-canvas"></canvas>
 
@@ -341,6 +514,47 @@
         <button class="q-btn active" id="btn-med">MED</button>
         <button class="q-btn" id="btn-high">HIGH</button>
       </div>
+      <div class="quality-controls" style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(0, 240, 210, 0.2);">
+        <span class="diag-label">THEME:</span>
+        <button class="q-btn active" id="btn-theme-light">LIGHT</button>
+        <button class="q-btn" id="btn-theme-dark">DARK</button>
+      </div>
+    </aside>
+
+    <!-- Multiplayer Lobby Panel -->
+    <aside class="network-panel interactive" id="network-panel">
+      <div class="net-title">
+        <span>COVENANT LINK // 1v1</span>
+        <span class="net-status-badge" id="net-status-badge">OFFLINE (SOLO)</span>
+      </div>
+      
+      <div id="net-lobby-controls">
+        <div class="net-form-row">
+          <input type="text" id="net-player-name" class="net-input" placeholder="Subject Name" value="Subject-01" />
+        </div>
+        <div class="net-form-row">
+          <button class="net-btn" id="btn-create-room" style="width: 100%;">HOST NEW ROOM</button>
+        </div>
+        <div class="net-form-row" style="margin-top: 6px;">
+          <input type="text" id="net-room-code" class="net-input" placeholder="Room Code" maxlength="4" style="text-transform: uppercase;" />
+          <button class="net-btn" id="btn-join-room">JOIN</button>
+        </div>
+      </div>
+
+      <div class="room-info-display" id="net-room-display" style="display: none;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+          <span style="color: #798e9d;">ROOM CODE:</span>
+          <span style="color: #00f0d2; font-weight: bold;" id="display-room-code">----</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+          <span style="color: #798e9d;">CONNECTED:</span>
+          <span style="color: #ffffff;" id="display-player-count">1 / 2</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: #798e9d;">ASSIGNED ROLE:</span>
+          <span style="color: #ffaa22; font-weight: bold;" id="display-player-role">GUEST</span>
+        </div>
+      </div>
     </aside>
 
     <!-- Bottom Footer -->
@@ -349,12 +563,59 @@
         <div class="objective-title">PRIMARY OBJECTIVE</div>
         <div class="objective-text">INSPECT THE ANCIENT COVENANT SHARD // SURVEY THE SEALED VAULT GATE</div>
       </div>
-      <div class="control-hints">
-        <div><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> Move Camera &bull; <span class="key">Click &amp; Drag</span> Look / Orbit</div>
-        <div><span class="key">Q</span> / <span class="key">E</span> Elevate Up/Down &bull; <span class="key">Scroll</span> Zoom / FOV</div>
-        <div><span class="key">M</span> Toggle Ambience</div>
+      <div class="control-hints" id="runner-controls-hints">
+        <div><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> Move Runner &bull; <span class="key">Space</span> Jump &bull; <span class="key">E</span> Interact</div>
+        <div><span class="key">Click &amp; Drag</span> Orbit Camera &bull; <span class="key">Scroll</span> Zoom &bull; <span class="key">Y</span> Sector &bull; <span class="key">T</span> Theme &bull; <span class="key">M</span> Mute</div>
       </div>
     </footer>
+
+    <!-- Warden CCTV Tactical Surveillance HUD (shown when role === WARDEN) -->
+    <div id="warden-cctv-hud" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+      <!-- Top CCTV Header & Live Feed Indicator (Centered, clear of diagnostics) -->
+      <div style="position: absolute; top: 68px; left: 50%; transform: translateX(-50%); font-family: monospace; z-index: 15; background: rgba(6, 12, 18, 0.92); border: 1px solid rgba(0, 240, 210, 0.4); border-top: 3px solid #ff3333; padding: 8px 24px; border-radius: 4px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.7); min-width: 380px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 3px;">
+          <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #ff3333; box-shadow: 0 0 8px #ff3333; animation: recBlink 1s infinite alternate ease-in-out;"></span>
+          <span style="color: #ff3333; font-weight: bold; letter-spacing: 2px; font-size: 13px;" id="warden-rec-timestamp">REC 00:00:00.00</span>
+          <span style="color: #00f0d2; font-size: 10px; border: 1px solid rgba(0, 240, 210, 0.4); padding: 1px 6px; border-radius: 2px;">LIVE 20Hz</span>
+        </div>
+        <div id="warden-cam-label" style="font-size: 16px; font-weight: bold; color: #00f0d2; letter-spacing: 1.5px; text-shadow: 0 0 10px rgba(0,240,210,0.6);">CAM 01 // CENTRAL ALTAR</div>
+        <div id="warden-cam-location" style="font-size: 11px; color: #8da4b4; margin-top: 2px;">SECTOR 01 • ENTRY RELAY &amp; ALTAR</div>
+      </div>
+
+      <!-- Bottom Command Console (Pointer-events auto) -->
+      <div class="interactive" style="position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: rgba(8, 14, 20, 0.94); border: 1px solid #00f0d2; border-top: 3px solid #ffaa22; padding: 12px 20px; border-radius: 4px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); min-width: 600px; text-align: center;">
+        
+        <!-- Energy Reserve Meter -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-weight: bold; color: #ffaa22; font-size: 11px; letter-spacing: 1px;">WARDEN FACILITY POWER:</span>
+          <span id="warden-energy-val" style="color: #ffffff; font-weight: bold;">100 / 100</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,170,34,0.4); border-radius: 2px; overflow: hidden; margin-bottom: 10px;">
+          <div id="warden-energy-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #ffaa22, #00f0d2); transition: width 0.15s ease;"></div>
+        </div>
+
+        <!-- Camera Switcher Buttons -->
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 8px;">
+          <button class="q-btn active" id="btn-cam-a"><span class="key" style="margin-right: 4px;">1</span> CAM 01 [ALTAR]</button>
+          <button class="q-btn" id="btn-cam-b"><span class="key" style="margin-right: 4px;">2</span> CAM 02 [EAST BAY]</button>
+          <button class="q-btn" id="btn-cam-c"><span class="key" style="margin-right: 4px;">3</span> CAM 03 [WEST ARCHIVE]</button>
+          <button class="q-btn" id="btn-cam-d"><span class="key" style="margin-right: 4px;">4</span> CAM 04 [BLAST GATE]</button>
+        </div>
+
+        <!-- Sabotage Abilities Hotbar -->
+        <div style="display: flex; justify-content: center; gap: 10px; border-top: 1px dashed rgba(0, 240, 210, 0.2); padding-top: 8px;">
+          <button class="net-btn" id="btn-ability-blackout" style="padding: 6px 12px; font-size: 11px;">
+            <span class="key" style="margin-right: 4px;">Q</span> BLACKOUT <span id="cd-blackout" style="color: #ffaa22; margin-left: 4px;">[35 EN]</span>
+          </button>
+          <button class="net-btn" id="btn-ability-lockdown" style="padding: 6px 12px; font-size: 11px;">
+            <span class="key" style="margin-right: 4px;">W</span> LOCKDOWN <span id="cd-lockdown" style="color: #ffaa22; margin-left: 4px;">[40 EN]</span>
+          </button>
+          <button class="net-btn" id="btn-ability-hazard" style="padding: 6px 12px; font-size: 11px;">
+            <span class="key" style="margin-right: 4px;">E</span> HAZARD PULSE <span id="cd-hazard" style="color: #ffaa22; margin-left: 4px;">[30 EN]</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/src/main.ts"></script>

@@ -1,13 +1,21 @@
 import * as THREE from 'three';
 import { MaterialFactory } from '../rendering/Materials.js';
 
+export type ShardState = 'idle' | 'collecting' | 'collected';
+
 export class EnergyShard {
   public group = new THREE.Group();
+  public state: ShardState = 'idle';
+
   private outerCrystal!: THREE.Mesh;
   private innerCore!: THREE.Mesh;
   private orbitRing1!: THREE.Mesh;
   private orbitRing2!: THREE.Mesh;
+  private verticalBeam!: THREE.Mesh;
+
   private baseHeight = 2.1;
+  private collectProgress = 0;
+  private onCollectCallback: (() => void) | null = null;
 
   constructor() {
     this.buildShard();
@@ -48,15 +56,49 @@ export class EnergyShard {
       transparent: true,
       opacity: 0.35
     });
-    const verticalBeam = new THREE.Mesh(beamGeo, beamMat);
-    this.group.add(verticalBeam);
+    this.verticalBeam = new THREE.Mesh(beamGeo, beamMat);
+    this.group.add(this.verticalBeam);
 
     // Initial position hovering above the pedestal
     this.group.position.set(0, this.baseHeight, 0);
   }
 
-  public update(timeSeconds: number): void {
-    // Smooth vertical levitation / floating bob
+  /** Trigger extraction by player interaction */
+  public collect(onComplete?: () => void): void {
+    if (this.state !== 'idle') return;
+    this.state = 'collecting';
+    this.collectProgress = 0;
+    if (onComplete) this.onCollectCallback = onComplete;
+  }
+
+  public update(timeSeconds: number, deltaSeconds: number = 0.016): void {
+    if (this.state === 'collected') {
+      return;
+    }
+
+    if (this.state === 'collecting') {
+      this.collectProgress += deltaSeconds * 1.5; // ~0.66s extraction sequence
+
+      // Dramatic vertical ascent and high-speed spin
+      this.group.position.y += deltaSeconds * 2.8;
+      this.outerCrystal.rotation.y += deltaSeconds * 24.0;
+      this.innerCore.rotation.x += deltaSeconds * 30.0;
+
+      // Implosion / absorption scaling down to 0
+      const scale = Math.max(0.0, 1.0 - this.collectProgress);
+      this.group.scale.set(scale, scale, scale);
+
+      if (this.collectProgress >= 1.0) {
+        this.state = 'collected';
+        this.group.visible = false;
+        if (this.onCollectCallback) {
+          this.onCollectCallback();
+        }
+      }
+      return;
+    }
+
+    // --- IDLE HOVER & LEVITATION ---
     const bob = Math.sin(timeSeconds * 2.2) * 0.12;
     this.group.position.y = this.baseHeight + bob;
 

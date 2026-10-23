@@ -8,13 +8,16 @@ export class LightingManager {
   public gateAmberLight!: THREE.PointLight;
   public ceilingStripLights: THREE.PointLight[] = [];
 
-  private shardLightBaseIntensity = 2.4;
-  private gateLightBaseIntensity = 1.8;
+  public currentTheme: 'light' | 'dark' = 'light';
+
+  private shardLightBaseIntensity = 2.8;
+  private gateLightBaseIntensity = 2.2;
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
     this.setupFog();
     this.setupLights();
+    this.applyTheme('light'); // Default to high-visibility light theme
   }
 
   private setupFog(): void {
@@ -66,7 +69,15 @@ export class LightingManager {
     }
   }
 
-  public update(timeSeconds: number): void {
+  public update(timeSeconds: number, deltaSeconds = 0.016): void {
+    // Check active blackout countdown
+    if (this.blackoutRemaining > 0) {
+      this.blackoutRemaining -= deltaSeconds;
+      if (this.blackoutRemaining <= 0) {
+        this.applyTheme(this.currentTheme);
+      }
+    }
+
     // Subtle supernatural heartbeat oscillation on shard light
     const shardPulse = Math.sin(timeSeconds * 2.8) * 0.45 + Math.sin(timeSeconds * 5.2) * 0.15;
     this.shardTealLight.intensity = this.shardLightBaseIntensity + shardPulse;
@@ -76,7 +87,63 @@ export class LightingManager {
     this.gateAmberLight.intensity = this.gateLightBaseIntensity + gatePulse;
   }
 
+  public applyTheme(theme: 'light' | 'dark'): void {
+    this.currentTheme = theme;
+    if (theme === 'light') {
+      // High-visibility bright inspection mode:
+      // Neutral crisp slate background & gentle mist
+      this.scene.background = new THREE.Color(0xb0c4de);
+      this.scene.fog = new THREE.FogExp2(0xb0c4de, 0.009);
+
+      // Bright neutral ambient fill (illuminates all corners & props)
+      this.ambientLight.color.setHex(0xffffff);
+      this.ambientLight.intensity = 2.0;
+
+      // Bright directional key light
+      this.dirKeyLight.color.setHex(0xffffff);
+      this.dirKeyLight.intensity = 2.4;
+
+      // Boost overhead strip markers
+      for (const p of this.ceilingStripLights) {
+        p.intensity = 2.0;
+        p.color.setHex(0xffc56e);
+      }
+      this.shardLightBaseIntensity = 3.0;
+      this.gateLightBaseIntensity = 2.4;
+    } else {
+      // Atmospheric dark horror mode
+      this.scene.background = new THREE.Color(0x05070a);
+      this.scene.fog = new THREE.FogExp2(0x06090e, 0.055);
+
+      this.ambientLight.color.setHex(0x0a121a);
+      this.ambientLight.intensity = 0.6;
+
+      this.dirKeyLight.color.setHex(0xa5c4d4);
+      this.dirKeyLight.intensity = 1.2;
+
+      for (const p of this.ceilingStripLights) {
+        p.intensity = 0.8;
+        p.color.setHex(0xffa834);
+      }
+      this.shardLightBaseIntensity = 2.4;
+      this.gateLightBaseIntensity = 1.8;
+    }
+  }
+
   public setShadowsEnabled(enabled: boolean): void {
     this.dirKeyLight.castShadow = enabled;
+  }
+
+  // Active Blackout state
+  private blackoutRemaining = 0;
+
+  public triggerBlackout(durationSeconds: number): void {
+    this.blackoutRemaining = durationSeconds;
+    this.ambientLight.intensity = 0.18;
+    this.dirKeyLight.intensity = 0.25;
+    for (const p of this.ceilingStripLights) {
+      p.color.setHex(0xff2200);
+      p.intensity = 1.8;
+    }
   }
 }

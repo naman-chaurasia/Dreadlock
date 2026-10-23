@@ -1,14 +1,16 @@
 import * as THREE from 'three';
+import { AssetLoader } from './AssetLoader.js';
 
 /**
- * Generates procedural PBR textures directly into HTML Canvas elements.
- * Produces crisp, reproducible, zero-bandwidth PBR textures (Diffuse, Normal, Roughness)
- * tailored for brutalist supernatural horror.
+ * Material Factory: manages PBR textures and shaders.
+ * Starts with procedural canvas PBR maps for zero-latency boot, then
+ * seamlessly upgrades to 1K Realistic PBR texture maps (AmbientCG Concrete, Tiles, Metal).
  */
 export class MaterialFactory {
   private static instance: MaterialFactory;
 
   public concreteMaterial!: THREE.MeshStandardMaterial;
+  public basaltFloorMaterial!: THREE.MeshStandardMaterial;
   public darkMetalMaterial!: THREE.MeshStandardMaterial;
   public hazardMaterial!: THREE.MeshStandardMaterial;
   public shardMaterial!: THREE.MeshPhysicalMaterial;
@@ -51,6 +53,16 @@ export class MaterialFactory {
       roughness: 0.85,
       metalness: 0.12,
       color: new THREE.Color(0x3a4047)
+    });
+
+    // 1b. Basalt Floor Material
+    this.basaltFloorMaterial = new THREE.MeshStandardMaterial({
+      map: concreteDiffuse,
+      normalMap: concreteNormal,
+      roughnessMap: concreteRoughness,
+      roughness: 0.75,
+      metalness: 0.2,
+      color: new THREE.Color(0x282e34)
     });
 
     // 2. Dark Industrial Metal (Pipes, Door Frame, Brackets)
@@ -112,6 +124,85 @@ export class MaterialFactory {
       emissive: new THREE.Color(0xff8800),
       emissiveIntensity: 0.15
     });
+
+    // Asynchronously upgrade to 1K Realistic PBR texture maps
+    this.loadRealisticPBRTextures();
+  }
+
+  /**
+   * Asynchronously upgrades materials to 1K Realistic PBR textures (AmbientCG sets)
+   */
+  private async loadRealisticPBRTextures(): Promise<void> {
+    const loader = AssetLoader.getInstance();
+
+    try {
+      // 1. Concrete PBR (AmbientCG Concrete042A)
+      const [cAlbedo, cNormal, cRoughness] = await Promise.all([
+        loader.loadTexture('/assets/textures/concrete/albedo.jpg', true),
+        loader.loadTexture('/assets/textures/concrete/normal.jpg'),
+        loader.loadTexture('/assets/textures/concrete/roughness.jpg')
+      ]);
+
+      if (cAlbedo && cNormal && cRoughness) {
+        cAlbedo.repeat.set(3, 3);
+        cNormal.repeat.set(3, 3);
+        cRoughness.repeat.set(3, 3);
+
+        this.concreteMaterial.map = cAlbedo;
+        this.concreteMaterial.normalMap = cNormal;
+        this.concreteMaterial.roughnessMap = cRoughness;
+        this.concreteMaterial.color.setHex(0xffffff);
+        this.concreteMaterial.needsUpdate = true;
+        console.log('[Materials] Upgraded Concrete to 1K AmbientCG PBR maps');
+      }
+
+      // 2. Basalt Floor PBR (AmbientCG Tiles088)
+      const [fAlbedo, fNormal, fRoughness] = await Promise.all([
+        loader.loadTexture('/assets/textures/basalt_floor/albedo.jpg', true),
+        loader.loadTexture('/assets/textures/basalt_floor/normal.jpg'),
+        loader.loadTexture('/assets/textures/basalt_floor/roughness.jpg')
+      ]);
+
+      if (fAlbedo && fNormal && fRoughness) {
+        fAlbedo.repeat.set(4, 4);
+        fNormal.repeat.set(4, 4);
+        fRoughness.repeat.set(4, 4);
+
+        this.basaltFloorMaterial.map = fAlbedo;
+        this.basaltFloorMaterial.normalMap = fNormal;
+        this.basaltFloorMaterial.roughnessMap = fRoughness;
+        this.basaltFloorMaterial.color.setHex(0xffffff);
+        this.basaltFloorMaterial.needsUpdate = true;
+        console.log('[Materials] Upgraded Basalt Floor to 1K AmbientCG PBR maps');
+      }
+
+      // 3. Dark Metal PBR (AmbientCG Metal045A)
+      const [mAlbedo, mNormal, mRoughness, mMetalness] = await Promise.all([
+        loader.loadTexture('/assets/textures/dark_metal/albedo.jpg', true),
+        loader.loadTexture('/assets/textures/dark_metal/normal.jpg'),
+        loader.loadTexture('/assets/textures/dark_metal/roughness.jpg'),
+        loader.loadTexture('/assets/textures/dark_metal/metalness.jpg')
+      ]);
+
+      if (mAlbedo && mNormal && mRoughness) {
+        mAlbedo.repeat.set(2, 2);
+        mNormal.repeat.set(2, 2);
+        mRoughness.repeat.set(2, 2);
+
+        this.darkMetalMaterial.map = mAlbedo;
+        this.darkMetalMaterial.normalMap = mNormal;
+        this.darkMetalMaterial.roughnessMap = mRoughness;
+        if (mMetalness) {
+          mMetalness.repeat.set(2, 2);
+          this.darkMetalMaterial.metalnessMap = mMetalness;
+        }
+        this.darkMetalMaterial.color.setHex(0xffffff);
+        this.darkMetalMaterial.needsUpdate = true;
+        console.log('[Materials] Upgraded Dark Metal to 1K AmbientCG PBR maps');
+      }
+    } catch (e) {
+      console.warn('[Materials] Realistic PBR upgrade notice:', e);
+    }
   }
 
   // --- Procedural Canvas Texture Generators ---
