@@ -2,6 +2,8 @@
 
 This document defines the exact tech stack, asset requirements, polygon budgets, texture resolutions, and approved download sources for upgrading DREADLOCK to full 3D realistic visual assets and animated characters.
 
+> **Pre-Configured Sources:** See [ASSET_SOURCES.md](file:///d:/Arcade%20Artificial%20Hackathon/docs/ASSET_SOURCES.md) for Section 0 pre-configured sources (Mixamo, Poly Haven, OpenGameArt, Three.js Assets, Freesound, game-icons.net), blocker escalation policy (`docs/BLOCKERS.md`), and usage order rules.
+
 ---
 
 ## 1. Engine & Tech Stack Architecture

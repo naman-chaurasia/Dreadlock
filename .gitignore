@@ -23,3 +23,9 @@ node_modules/
 npm-debug.log*
 
 dist/
+
+# Raw Mixamo and 3D working source files (non-redistributable; convert/embed to .glb/.gltf for runtime)
+*.fbx
+*.blend
+*.blend1
+raw_mixamo/

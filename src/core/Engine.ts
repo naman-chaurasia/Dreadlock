@@ -439,9 +439,25 @@ export class Engine {
     document.getElementById('btn-theme-light')?.addEventListener('click', () => this.applyTheme('light'));
     document.getElementById('btn-theme-dark')?.addEventListener('click', () => this.applyTheme('dark'));
 
+    // Hook Credits modal
+    const creditsModal = document.getElementById('credits-modal');
+    document.getElementById('btn-open-credits')?.addEventListener('click', () => {
+      if (creditsModal) creditsModal.style.display = 'flex';
+    });
+    document.getElementById('btn-close-credits')?.addEventListener('click', () => {
+      if (creditsModal) creditsModal.style.display = 'none';
+    });
+
     // Keyboard event listeners
     window.addEventListener('keydown', (e) => {
       this.keys[e.code] = true;
+
+      if (e.code === 'Escape') {
+        const credits = document.getElementById('credits-modal');
+        if (credits && credits.style.display !== 'none') {
+          credits.style.display = 'none';
+        }
+      }
 
       if (e.code === 'KeyE') {
         this.interactPressed = true;

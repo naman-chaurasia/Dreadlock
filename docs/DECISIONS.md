@@ -11,6 +11,16 @@ Append decisions with date, owner, scope, rationale, consequences, and affected 
 - **Intended stack direction from the conversation:** Three.js + TypeScript; Vite; Rapier 3D physics; Node.js + Socket.IO multiplayer; Blender-authored GLB/GLTF assets; Three.js shaders/post-processing; Web Audio API and properly licensed sound. This is a target stack recommendation, not evidence all components are installed or implemented. Inspect current root app before integrating components.
 - **Consequences:** Update root instructions and project docs to make the browser target explicit. Rework Unreal-specific architecture requirements as browser responsibility boundaries. Plan server-authoritative multiplayer early; do not scale art/maps ahead of a connectivity proof. Document browser build/package/deployment needs. Retain the Unreal GDD implementation section as historical/source context but mark it superseded.
 
+## Approved decision — 2026-10-24: PlayCanvas Scope & Boundary (Reference & Assets Only)
+
+- **Decision:** PlayCanvas is strictly restricted to reference and compatible asset sourcing only. Do not migrate the game engine or incorporate the PlayCanvas engine runtime. The browser game runtime remains Three.js.
+- **Owner/approval evidence:** User instruction in conversation: "PLANCANVA NO USE HERE ? / YES UPDATE TEHSE OF Allowed use for PlayCanvas:".
+- **Status:** APPROVED.
+- **Scope:**
+  - **Allowed:** Technical research, WebGL shader inspiration, camera/lighting setups, and sourcing compatible CC0/open 3D models or textures.
+  - **Prohibited:** Engine migration, importing the PlayCanvas npm engine/scripts, or replacing Three.js.
+- **Affected documents:** `docs/ASSET_SOURCES.md`, `docs/PROJECT_SOURCE_OF_TRUTH.md`, `docs/DECISIONS.md`.
+
 ## Open decisions
 
 | ID | Decision needed | Owner | Status |
