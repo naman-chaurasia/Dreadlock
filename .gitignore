@@ -21,3 +21,5 @@ desktop.ini
 # Node modules & temporary files
 node_modules/
 npm-debug.log*
+
+dist/

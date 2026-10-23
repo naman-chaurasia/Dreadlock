@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DREADLOCK // Entry Vault Prototype</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #05070a;
+      font-family: 'Consolas', 'Courier New', monospace;
+      color: #c4d1db;
+    }
+
+    #webgl-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    #hud-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+    }
+
+    .interactive {
+      pointer-events: auto;
+    }
+
+    /* Scanline overlay for atmospheric surveillance feel */
+    .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%,
+        rgba(0, 0, 0, 0.25)
+      );
+      background-size: 100% 4px;
+      opacity: 0.6;
+    }
+
+    /* Vignette effect */
+    .vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Top Navigation / Status Header */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(0, 240, 210, 0.25);
+      padding-bottom: 8px;
+      background: linear-gradient(180deg, rgba(8, 14, 20, 0.8) 0%, rgba(8, 14, 20, 0) 100%);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #00f0d2;
+      text-shadow: 0 0 8px rgba(0, 240, 210, 0.5);
+      text-transform: uppercase;
+    }
+
+    .sub-brand {
+      font-size: 11px;
+      color: #8da4b4;
+      margin-top: 2px;
+    }
+
+    .top-right {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .facility-alert {
+      color: #ffaa22;
+      border: 1px solid rgba(255, 170, 34, 0.4);
+      background: rgba(255, 170, 34, 0.1);
+      padding: 4px 10px;
+      border-radius: 2px;
+      animation: alertPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; border-color: rgba(255, 170, 34, 0.8); }
+    }
+
+    /* Performance Diagnostics Overlay */
+    .diagnostics-panel {
+      position: absolute;
+      top: 70px;
+      left: 16px;
+      background: rgba(6, 10, 16, 0.85);
+      border: 1px solid rgba(0, 240, 210, 0.2);
+      border-left: 3px solid #00f0d2;
+      padding: 10px 14px;
+      border-radius: 2px;
+      font-family: 'Consolas', monospace;
+      font-size: 11px;
+      min-width: 220px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .diag-title {
+      color: #00f0d2;
+      font-weight: 700;
+      margin-bottom: 6px;
+      border-bottom: 1px dashed rgba(0, 240, 210, 0.2);
+      padding-bottom: 4px;
+    }
+
+    .diag-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .diag-label {
+      color: #798e9d;
+    }
+
+    .diag-val {
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .diag-val.good { color: #00f0d2; }
+    .diag-val.warn { color: #ffaa22; }
+
+    /* Quality preset controls */
+    .quality-controls {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(0, 240, 210, 0.2);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .q-btn {
+      background: rgba(14, 24, 34, 0.9);
+      border: 1px solid rgba(0, 240, 210, 0.3);
+      color: #8da4b4;
+      padding: 2px 8px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .q-btn:hover {
+      background: rgba(0, 240, 210, 0.2);
+      color: #ffffff;
+    }
+
+    .q-btn.active {
+      background: #00f0d2;
+      color: #04090f;
+      font-weight: bold;
+      border-color: #00f0d2;
+      box-shadow: 0 0 8px rgba(0, 240, 210, 0.4);
+    }
+
+    /* Bottom Info & Controls Bar */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(0, 240, 210, 0.15);
+      padding-top: 8px;
+      background: linear-gradient(0deg, rgba(8, 14, 20, 0.8) 0%, rgba(8, 14, 20, 0) 100%);
+    }
+
+    .objective-box {
+      background: rgba(6, 12, 18, 0.85);
+      border-left: 3px solid #ffaa22;
+      padding: 6px 12px;
+    }
+
+    .objective-title {
+      font-size: 10px;
+      color: #ffaa22;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .objective-text {
+      color: #ffffff;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .control-hints {
+      text-align: right;
+      color: #798e9d;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .key {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 1px 5px;
+      border-radius: 2px;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    /* Reticle for central focus */
+    .reticle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.45;
+    }
+
+    .reticle::before, .reticle::after {
+      content: '';
+      position: absolute;
+      background-color: #00f0d2;
+    }
+
+    .reticle::before {
+      top: 6px;
+      left: 0;
+      width: 14px;
+      height: 2px;
+    }
+
+    .reticle::after {
+      top: 0;
+      left: 6px;
+      width: 2px;
+      height: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="reticle"></div>
+
+  <canvas id="webgl-canvas"></canvas>
+
+  <div id="hud-container">
+    <!-- Top Header -->
+    <header class="top-bar">
+      <div>
+        <div class="brand-title">DREADLOCK // THE CRUCIBLE</div>
+        <div class="sub-brand">SECTOR 01: ENTRY VAULT • ARCHITECT CONTAINMENT FACILITY</div>
+      </div>
+      <div class="top-right">
+        <div class="facility-alert">COVENANT ENGINE: STANDBY (PHASE 2 PROOF)</div>
+      </div>
+    </header>
+
+    <!-- Diagnostics Panel -->
+    <aside class="diagnostics-panel interactive" id="diagnostics-panel">
+      <div class="diag-title">SYSTEM DIAGNOSTICS</div>
+      <div class="diag-row">
+        <span class="diag-label">FPS:</span>
+        <span class="diag-val good" id="stat-fps">--</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">FRAME TIME:</span>
+        <span class="diag-val" id="stat-ms">-- ms</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">DRAW CALLS:</span>
+        <span class="diag-val" id="stat-calls">--</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">TRIANGLES:</span>
+        <span class="diag-val" id="stat-tris">--</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">GEOMETRIES:</span>
+        <span class="diag-val" id="stat-geoms">--</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">TEXTURES:</span>
+        <span class="diag-val" id="stat-textures">--</span>
+      </div>
+      <div class="diag-row">
+        <span class="diag-label">RENDER RES:</span>
+        <span class="diag-val" id="stat-res">--</span>
+      </div>
+      <div class="quality-controls">
+        <span class="diag-label">PRESET:</span>
+        <button class="q-btn" id="btn-low">LOW</button>
+        <button class="q-btn active" id="btn-med">MED</button>
+        <button class="q-btn" id="btn-high">HIGH</button>
+      </div>
+    </aside>
+
+    <!-- Bottom Footer -->
+    <footer class="bottom-bar">
+      <div class="objective-box">
+        <div class="objective-title">PRIMARY OBJECTIVE</div>
+        <div class="objective-text">INSPECT THE ANCIENT COVENANT SHARD // SURVEY THE SEALED VAULT GATE</div>
+      </div>
+      <div class="control-hints">
+        <div><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> Move Camera &bull; <span class="key">Click &amp; Drag</span> Look / Orbit</div>
+        <div><span class="key">Q</span> / <span class="key">E</span> Elevate Up/Down &bull; <span class="key">Scroll</span> Zoom / FOV</div>
+        <div><span class="key">M</span> Toggle Ambience</div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
