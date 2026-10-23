@@ -1,0 +1,1159 @@
+GAME CONCEPT& WORKING DOCUMENT
+
+DREADLOCK
+
+ONE FACILITY. TWO ROLES. EVERY 120 SECONDS, THE HUNT CHANGES HANDS.
+
+A two-player asymmetric supernatural horror game
+
+A mysterious civilization has built a living facility that forces two captives to compete for freedom. One navigates its shifting chambers. The other controls the traps from a sealed surveillance room. Every two minutes, the facility exchanges their roles.
+
+DOCUMENT TYPE
+
+TARGET
+
+STATUS
+
+Game Concept + Working GDD
+
+Artificial Arcade / PS02: Chaos Control
+
+Concept v1.0 • 23 Oct 2026
+
+Purpose: align the team on story, player experience, mechanics, networking, production scope and acceptance tests before implementation.
+
+WORKING TITLE ONLY — name and trademarks not yet cleared.
+
+AT A GLANCE01. Project Snapshot
+
+DREADLOCK is built around a single dramatic promise: players are not fighting a monster together; they are taking turns being the person who runs through danger and the person who controls it. The facility forces that reversal every 120 seconds, making adaptation the heart of the competition.
+
+ITEM
+
+DEFINITION
+
+Genre
+
+Asymmetric 1v1 competitive horror / strategy / arcade
+
+Platform / engine
+
+PC prototype in Unreal Engine; exact engine version follows the existing project
+
+Session
+
+Two human players; online host/join is the target
+
+Camera
+
+Guest: third-person by default. Warden: fixed surveillance/control-room view.
+
+Match format
+
+Four 120-second rounds; roles alternate after each round. Three arenas rotate, with one arena repeated.
+
+Primary player fantasy
+
+Outthink a human opponent while a supernatural facility changes the rules around you.
+
+Tone
+
+Oppressive, mysterious, supernatural; no gore required
+
+Target build
+
+Playable vertical slice suitable for a 24-hour game hackathon
+
+Design pillars
+
+Asymmetric fairness: both roles have meaningful decisions, clear counterplay and equivalent match time.
+
+Readable horror: threats feel surprising, but signals give players a fair chance to react.
+
+The building is the weapon: doors, lights, lifts, barriers and traps are gameplay systems, not decoration.
+
+Role reversal changes perspective: each player must understand both sides to win consistently.
+
+Small scope, strong identity: compact arenas and reusable systems instead of an open world.
+
+Core design rule
+
+Every sabotage action must create a readable, avoidable problem for the Guest and a meaningful strategic choice for the Warden. Random punishment is not good multiplayer horror.
+
+NARRATIVE FOUNDATION02. Story Bible
+
+Logline
+
+Two strangers awaken inside a supernatural facility built by a vanished civilization. One must cross its lethal chambers; the other must control them from a sealed dark room. Every 120 seconds, the facility swaps their roles. The only way to earn freedom is to master both sides of the same deadly system.
+
+The premise
+
+The facility is called the Crucible by the people trapped inside it. Its creators are known only as the Architects: an ancient civilization that treated consciousness as a force that could be measured, divided and rewritten. They built structures that respond to thought, memory and intention. Their greatest experiment was not a weapon. It was a trial designed to discover which minds could adapt when control and vulnerability changed without warning.
+
+The two captives wake in separate spaces. The Guest occupies the physical facility: a vast complex of stone, metal and impossible geometry. The Warden awakens in a sealed control chamber, surrounded by camera feeds, levers, power routing controls and a voice that speaks through the walls. Both receive the same message: “Earn your exit.” Neither is told that only one clearance will be granted.
+
+Backstory
+
+At the height of their civilization, the Architects built the Crucible to test whether a mind could survive absolute changes in agency. One subject was given movement but no control over the environment. The other received control over the environment but no physical freedom. The facility linked their decisions through a supernatural system called the Covenant Engine. Every two minutes, the Engine reversed the assignment. The Architects believed a mind that could survive both power and helplessness could be trusted with the civilization’s final technology.
+
+The experiment outlived its creators. The Architects vanished, but the Crucible continues to run its trials. It no longer remembers the purpose of the experiment. It remembers only the procedure, the punishment and the promise of an exit.
+
+The central mystery
+
+The facility claims that the winning captive will be released. Evidence found in later arenas suggests that previous winners were not freed; they were absorbed into the system and became part of its control network. The final decision is whether to accept the promised exit, destroy the Covenant Engine, or risk remaining inside long enough to release both captives. For the prototype, this mystery is communicated through props, short transmissions and the ending screen—not expensive cinematic sequences.
+
+Narrative direction
+
+Keep the story legible through short environmental clues. The competitive round must remain the main event; lore should reward attention without interrupting play.
+
+STORY-TO-GAMEPLAY03. World, Roles and Narrative Beats
+
+The setting: the Crucible
+
+WORLD ELEMENT
+
+NARRATIVE PURPOSE
+
+GAMEPLAY PURPOSE
+
+Impossible architecture
+
+Shows that the Architects controlled physical law.
+
+Doors, lifts and corridors can reconfigure between stages.
+
+Surveillance lenses
+
+Suggest the facility has observed countless trials.
+
+Give the Warden clear camera coverage and a strategic information network.
+
+Covenant Engine
+
+Explains why roles switch on a fixed timer.
+
+Authoritative 120-second role-switch system.
+
+Control chamber
+
+A second prison disguised as a command room.
+
+Warden interface for lights, locks, hazards and power.
+
+Exit seal
+
+The promise that drives both captives.
+
+Final objective and win condition.
+
+Playable roles
+
+ROLE
+
+MOTIVATION
+
+TOOLS
+
+LIMITS
+
+Guest / Runner
+
+Reach the exit and secure personal freedom.
+
+Movement, jump, interact, objective clues, route choices.
+
+Cannot directly disable every system; must read warnings and choose routes.
+
+Warden / Saboteur
+
+Stop the Guest from earning clearance and earn freedom when roles reverse.
+
+Remote cameras, door locks, lights, trap controls, power rerouting.
+
+Cannot move through the arena or attack directly; has limited energy and cooldowns.
+
+Narrative beats across arenas
+
+Opening: the captives learn the two-role rule and see the first role transfer. Minimal text; a strong visual demonstration.
+
+Discovery: the Guest finds records of earlier trials; the Warden sees the same event from archived camera footage.
+
+Contradiction: the control room’s “escape clearance” messages conflict with evidence that prior winners disappeared.
+
+Final trial: the Covenant Engine opens the exit seal only after the match has produced a winner.
+
+Ending: winner receives a possible escape; loser is reclaimed by the Crucible. A future full release may add a rare cooperative ending.
+
+Character voice
+
+Keep dialogue sparse. The facility speaks in formal, clinical phrases. Environmental audio and player choices carry the emotion.
+
+THE PLAYABLE CONTRACT04. Core Loop and Match Rules
+
+Core gameplay loop
+
+STEP
+
+GUEST / RUNNER
+
+WARDEN / SABOTEUR
+
+1. Read
+
+Inspect room, objective marker and environmental warning cues.
+
+Inspect cameras, trap states, energy and the Guest’s likely route.
+
+2. Decide
+
+Choose objective order, route and whether to risk a shortcut.
+
+Choose which mechanism to activate, when to spend energy and where to deny progress.
+
+3. Act
+
+Interact with machinery, collect a key component, reach a checkpoint.
+
+Lock a door, disrupt power, activate a hazard or redirect a platform.
+
+4. Counterplay
+
+Dodge or reroute around a readable hazard; bait a cooldown.
+
+Observe the Guest’s response and plan the next intervention.
+
+5. Resolve
+
+Earn progress and/or complete the escape objective.
+
+Earn denial points if objective is not completed before the round ends.
+
+6. Reverse
+
+At round end, become the Warden.
+
+At round end, become the Guest.
+
+Recommended match format
+
+RULE
+
+PROPOSED SPECIFICATION
+
+Players
+
+Exactly 2 human players in a match.
+
+Round length
+
+Exactly 120 seconds of role time. The server owns the timer.
+
+Rounds per match
+
+4 rounds / 8 minutes maximum, not counting menus and transitions.
+
+Role assignment
+
+Roles alternate at every round boundary. Each player gets two Guest rounds and two Warden rounds.
+
+Arena sequence
+
+Arena 1, Arena 2, Arena 3, then replay one arena for the final round.
+
+Early objective result
+
+Completing the exit objective locks the Guest round win. The 120-second window continues for optional bonus actions; roles swap at the scheduled boundary.
+
+Final result
+
+Most round wins takes match. Total score breaks a tie; if still tied, run a 60-second sudden-death round.
+
+Round flow
+
+Ready check → role assignment → 3-second countdown → 120-second live round → lock round result if the exit objective is completed, while optional bonus play continues → round-end horn → switch roles → load/reset next arena → final results after Round 4.
+
+Fairness rule: the server controls role switching and timer state. Both clients must observe the same round index, role assignment and remaining time.
+
+BUILDABLE SYSTEMS05. Gameplay Mechanics
+
+Guest / Runner actions
+
+ACTION
+
+INPUT / FEEDBACK
+
+RULE
+
+Move and jump
+
+Standard third-person controls; responsive acceleration.
+
+Movement runs through Unreal’s networked character movement path.
+
+Interact
+
+Context prompt when near a usable actor.
+
+Server validates range, role, actor state and current round.
+
+Objective progress
+
+Three-step sequence: locate component, restore node, activate exit relay.
+
+Progress updates are replicated and cannot be set directly by client UI.
+
+Counterplay
+
+Warning light, audio cue and short hazard wind-up.
+
+Hazards must have a readable response window; no unavoidable instant loss.
+
+Warden / Saboteur actions
+
+ABILITY
+
+EFFECT
+
+BALANCE GUARDRAIL
+
+Lockdown
+
+Temporarily locks a selected door or barrier.
+
+Short duration; visible warning; cannot seal every route.
+
+Blackout
+
+Turns off local lights and disrupts one camera feed.
+
+Emergency lights remain; Guest can navigate; cooldown is longer.
+
+Trap trigger
+
+Activates a floor hazard or pressure mechanism.
+
+Wind-up cue and clear escape lane; no direct damage kill in MVP.
+
+Power reroute
+
+Enables one hazard or disables one helpful system.
+
+One active reroute at a time; energy cost prevents spam.
+
+Resource model
+
+Warden energy: starts each round at 100 units. Suggested action costs: Lockdown 25, Blackout 35, Trap 30, Power Reroute 40. Tune after testing.
+
+Energy recovery: regain 10 units every 20 seconds, capped at 100. No ability may bypass cooldown or energy validation.
+
+Cooldowns: each ability has its own visible cooldown. Do not rely on energy cost alone to balance a dominant ability.
+
+No instant-kill sabotage in the prototype. The Warden wins through denial and time pressure; this is clearer to balance in a short hackathon build.
+
+Environmental interaction minimum
+
+At minimum, ship three functional mechanisms in every arena or prove at least three unique interactive elements across the game. For a stronger judge demonstration, reuse a small set of replicated mechanism classes with different level placements.
+
+THREE PLAYABLE STAGES06. Arena and Level Plan
+
+Each arena uses one readable objective, three or more interactive mechanisms and at least two viable routes. Build blockout geometry first; visual polish comes only after replicated interaction works.
+
+ARENA
+
+VISUAL IDENTITY
+
+GUEST OBJECTIVE
+
+WARDEN TOOLS / MECHANISMS
+
+01. The Entry Vault
+
+Monumental stone-metal gate, etched glyphs, low amber light.
+
+Find two power shards and activate the entry relay.
+
+Sliding gate, light grid, floor pulse trap.
+
+02. The Living Foundry
+
+Ancient machinery fused with organic-looking architecture, teal energy.
+
+Reroute power through three nodes to open the service lift.
+
+Moving platform, energy conduit, pressure vent.
+
+03. The Observatory
+
+Vertical chamber, rotating rings, false stars beyond a sealed ceiling.
+
+Align three symbols and activate the exit seal.
+
+Rotating bridge, door locks, darkness pulse.
+
+Level layout rules
+
+Use a compact loop with a safe spawn zone, central objective, one alternate route and a final exit point.
+
+Never place the Guest so close to a hazard that a Warden can guarantee a hit before the first warning cue.
+
+Place cameras so the Warden must choose between complete route coverage and monitoring objective interactions.
+
+Keep the control room visually distinct, but avoid building a second large 3D map. A fixed camera console with clickable feeds is enough for the MVP.
+
+Make navigation differences readable through landmarks, lighting and unique silhouettes; do not rely on color alone.
+
+MVP map production
+
+Block out all three arenas using the same scale and interaction framework. Each arena should be completable in a 120-second role window after the team learns its route. If time slips, keep three small functional stages rather than one polished stage and two empty maps.
+
+Asset strategy
+
+Reuse doors, switches, trap volumes, light actors, moving platforms and UI widgets. Variants should come from placement, timing and visuals—not bespoke code per arena.
+
+UNREAL IMPLEMENTATION BRIEF07. Multiplayer and Technical Design
+
+Implementation should adapt to the team’s installed Unreal Engine version and working project. The exact engine version, online plugin and connected MCP tool capabilities must be recorded during technical discovery; do not assume a particular plugin API before checking the project.
+
+Recommended authority model
+
+SYSTEM
+
+RESPONSIBILITY
+
+NETWORK RULE
+
+GameMode
+
+Server-only match rules, spawning, round outcome, role swap.
+
+Never treated as authoritative on clients; clients receive result through replicated game state.
+
+GameState
+
+Round index, phase, end time, objective state, scores and match result.
+
+Replicated state; clients update HUD from it.
+
+PlayerState
+
+Player identity, role, match score and round wins.
+
+Replicated so both players see correct assignments and score.
+
+PlayerController
+
+Input routing, role-specific controls and HUD ownership.
+
+Client requests actions; server validates consequential actions.
+
+Character
+
+Guest movement, camera and interaction requests.
+
+Use the engine’s networked movement path; avoid manual client transforms.
+
+Mechanism actors
+
+Door, trap, light, platform and power state.
+
+Server changes state; replicated properties/RepNotify update visuals on both machines.
+
+Session layer
+
+Create, find, join, leave and report connection errors.
+
+Use a compatible online session provider already supported by the project.
+
+Network action pattern
+
+Player input → client request / Server RPC → authority validation → authoritative state change → replicated property or multicast visual cue → both clients update presentation.
+
+Required validation checks
+
+Only the server changes role, round phase, score, objective completion, ability energy or trap state.
+
+Validate current role, distance to interactable, active round, energy, cooldown, target actor and whether the requested transition is legal.
+
+Use server time or a server-owned round end timestamp; do not let two local timers decide the winner independently.
+
+Treat the control-room interface as a command surface, not the authority. A button click is only a request until the server accepts it.
+
+Test a packaged build on two separate PCs. Two PIE windows on one machine are a useful first test, not proof of public-internet connectivity.
+
+Online session plan
+
+Preferred route: keep the project’s compatible online session plugin if it already works. If internet play is not configured, evaluate the supported provider and required credentials immediately. Direct-IP may serve as a limited fallback, but public-internet reachability is not guaranteed because of NAT and firewall conditions.
+
+CRITICAL MULTIPLAYER LOGIC08. Round State, Role Switching and Failure Cases
+
+Authoritative state machine
+
+STATE
+
+ENTRY CONDITION
+
+ALLOWED BEHAVIOUR
+
+EXIT
+
+Waiting
+
+Session has fewer than 2 ready players.
+
+Menu and ready status only.
+
+Two players ready.
+
+Countdown
+
+Both players are ready.
+
+Lock role inputs; show 3-second countdown.
+
+Countdown reaches zero.
+
+Live Round
+
+Server starts the 120-second window.
+
+Role abilities, objectives, timer and scoring are active. Objective success can lock the round result while optional play continues.
+
+120-second timer expires.
+
+Round Resolve
+
+Round result has been locked.
+
+Freeze scoring-affecting inputs; show result banner.
+
+Server resolves score and assigns next roles.
+
+Role Transfer
+
+120-second round boundary reached.
+
+Show short transition; swap roles atomically and reset round-only cooldowns/energy.
+
+Both clients acknowledge or transition timeout expires.
+
+Match Results
+
+Four rounds completed or sudden death resolved.
+
+Show winner, score and rematch option.
+
+Players rematch or leave.
+
+Role-switch rule
+
+At each round boundary, the server swaps role assignments in one atomic transition: Player A switches from Guest to Warden while Player B switches from Warden to Guest. The server increments RoundIndex, resets round timer and role-specific resources, loads or resets the next arena, then begins the next countdown. A player must never be Guest on one client and Warden on the other.
+
+Failure and disconnect handling
+
+CASE
+
+EXPECTED BEHAVIOUR
+
+Player leaves mid-round
+
+Pause briefly and show a disconnect banner. End round as a forfeit after a short grace period; do not hang forever.
+
+Host disconnects
+
+For MVP, terminate session safely and return the remaining player to the menu. Host migration is out of scope.
+
+RPC spam / wrong role
+
+Reject request on server; do not change state. Add modest rate limiting if time allows.
+
+Round timer reaches zero twice
+
+Round resolution must be idempotent. Only one transition and one score award may occur.
+
+Arena fails to load
+
+Return to a known safe map and show a recoverable error; never leave players in a black screen indefinitely.
+
+Role UI fails to refresh
+
+Drive HUD from replicated role/phase state, not a local toggle. Rebuild role UI on OnRep/state change.
+
+Critical test: force a role swap while both clients are connected. Verify roles, controls, HUD, camera access, energy and replicated mechanism states all agree.
+
+COMPETITIVE RULES09. Scoring, Win Conditions and Fairness
+
+Round outcome
+
+OUTCOME
+
+CONDITION
+
+ROUND WINNER
+
+Guest escapes
+
+Guest completes required objective and activates the exit before the 120-second limit.
+
+Guest player
+
+Guest is contained
+
+Timer expires and the required objective is incomplete.
+
+Warden player
+
+Disconnect / unrecoverable error
+
+One player disconnects or a critical match state cannot recover.
+
+Forfeit rules; show clear reason.
+
+Provisional point model
+
+EVENT
+
+POINTS
+
+VALIDATION
+
+Guest reaches objective checkpoint
+
++20 per unique checkpoint
+
+Award once per round and checkpoint.
+
+Guest completes main objective / exit
+
++100 and round win
+
+Server confirms requirements and extraction overlap.
+
+Guest collects optional lore relic
+
++10
+
+Optional; do not block required win on lore collection.
+
+Warden triggers meaningful disruption
+
++10 per unique successful disruption
+
+Award only if a mechanism state actually changes; cap at 30 per round.
+
+Warden contains Guest until timer
+
++100 and round win
+
+Server timer expires with objective incomplete.
+
+Invalid or repeated interaction
+
+0
+
+Rejected requests do not grant score.
+
+Match winner
+
+Four rounds; each player is Guest twice and Warden twice.
+
+Primary result: most round wins. Secondary result: highest total points across all four rounds.
+
+If tied after four rounds, run a 60-second sudden-death round in a selected arena. Swap roles only after that round resolves.
+
+The fiction states the winner earns the only exit clearance; the loser is reclaimed by the facility. This preserves a clear competitive stakes model.
+
+Fairness and anti-frustration rules
+
+Each trap has an activation cue, delay and counterplay route. Never make a perfect-information, unavoidable trap the dominant strategy.
+
+Cap points from repeated use of one mechanism so a Warden cannot farm score without making strategic choices.
+
+Keep role time equal, reset role-specific resource state predictably and show why an action failed.
+
+Test both player identities in both roles; do not test only Player 1 as Guest.
+
+PLAYER FEEDBACK10. UI, Visual Direction and Audio
+
+Guest HUD
+
+Round timer and current objective at the top of the screen.
+
+Compact objective checklist with visible progress.
+
+Contextual interact prompt; show why an interaction is unavailable when useful.
+
+Hazard warnings: light cue, sound cue and short wind-up animation.
+
+Brief role-switch countdown and result banner; avoid covering the centre of the screen during movement.
+
+Warden control interface
+
+A small set of surveillance feeds or camera buttons with clear location labels.
+
+Ability buttons display energy cost, cooldown, target and active state.
+
+Door, power, hazard and camera status must be visible at a glance.
+
+When a requested action is rejected, show a short reason such as “Insufficient energy” or “Cooling down”.
+
+Visual identity
+
+ELEMENT
+
+ART DIRECTION
+
+Architecture
+
+Monolithic geometric stone, black metal, impossible angles, repeated glyph motifs.
+
+Primary palette
+
+Charcoal, cold blue/teal energy, restrained amber warning lights.
+
+Lighting
+
+Deep shadow with clear silhouette lighting; warning cues must remain readable.
+
+Supernatural effects
+
+Subtle distortion, glyph pulses, short geometry shifts; avoid expensive full-screen effects.
+
+UI
+
+Functional industrial panels; clear hierarchy; avoid decorative effects that obscure timers or buttons.
+
+Audio priorities
+
+Distinct cues for role swap, door lock, trap armed, objective completion, timer warning and round result.
+
+Low ambient drone and distant machinery build tension without masking critical cues.
+
+The Warden hears a confirmation tone when a command succeeds; the Guest hears the corresponding environmental cue.
+
+Provide visual alternatives to essential sound cues for players who play without audio.
+
+SHIP THE SMALLEST COMPLETE GAME11. 24-Hour Production Plan
+
+The schedule is a sequence of gates, not a guarantee. At each gate, preserve a working build before adding new features. If online connectivity is not proven early, stop content expansion until the connection path is resolved.
+
+TIME
+
+BUILD GOAL
+
+EXIT CRITERION
+
+00:00–01:00
+
+Project/MCP audit, version check, backup, compile baseline.
+
+Known engine version; project opens and compiles or has a documented baseline blocker.
+
+01:00–04:00
+
+Two-player session, replicated movement, host/join flow.
+
+Two separate game instances connect; players see each other move.
+
+04:00–07:00
+
+Role assignment and 120-second server-owned round clock.
+
+Roles match across clients; swap occurs at round boundary.
+
+07:00–10:00
+
+One Guest objective and three environmental interactions.
+
+Guest objective and Warden controls function over network.
+
+10:00–12:00
+
+Scoring, win/loss, results, restart and role reversal.
+
+Two consecutive rounds complete without duplicate score or soft lock.
+
+12:00–16:00
+
+Three compact arenas built from reusable actors.
+
+All three maps are playable; minimum interactions work in each.
+
+16:00–18:00
+
+HUD, role-specific control UI, audio/visual feedback.
+
+Players always understand role, objective, timer and action cooldown.
+
+18:00–21:00
+
+Package build and test on two PCs over intended network.
+
+Packaged build launches and completes a match.
+
+21:00–24:00
+
+Critical bug fixes, acceptance pass, demo rehearsal.
+
+Known-good build backed up; every requirement marked PASS/FAIL/NOT TESTED.
+
+Scope cuts if behind schedule
+
+Cut cinematic intro, voice acting, inventory systems, complex AI and alternate endings first.
+
+Use the same mechanism blueprint with different meshes, timings and placements.
+
+Prefer simple camera feeds or labelled room views over a complex interactive security map.
+
+Keep three playable arenas at low visual complexity; do not trade required stage count for high-detail art.
+
+If internet provider setup is the blocker, immediately decide whether the event permits a controlled network fallback. Do not claim internet multiplayer based only on local testing.
+
+AGENT-READY WORK PACKAGES12. Implementation Backlog
+
+Recommended execution order for Antigravity/Unreal MCP. Assign one ticket at a time and require evidence before moving to the next ticket.
+
+ID / PRIORITY
+
+TASK
+
+ACCEPTANCE CRITERION
+
+CC-001 / P0
+
+Inspect project, engine version, plugins, MCP tool list and build path.
+
+Report contains exact version and verified editor/build operations.
+
+CC-002 / P0
+
+Create or verify online host/join session.
+
+Two separate instances can connect via the intended provider.
+
+CC-003 / P0
+
+Verify replicated player movement.
+
+Both players see correct movement; no hand-written client teleport is used.
+
+CC-004 / P0
+
+Implement authoritative role and round state.
+
+One server-owned 120-second timer; role swap is identical on both clients.
+
+CC-005 / P0
+
+Implement Guest interaction and objective chain.
+
+Objective completion is validated and replicated from server.
+
+CC-006 / P0
+
+Implement three Warden mechanisms.
+
+Each mechanism changes authoritative state and has cue/cooldown/energy rule.
+
+CC-007 / P0
+
+Add round scoring, end state, role swap and restart.
+
+No duplicate score; four-round match ends with correct winner.
+
+CC-008 / P0
+
+Build three playable stage layouts.
+
+Each arena loads, has objective path and three interactive elements.
+
+CC-009 / P1
+
+Add Guest HUD and Warden control UI.
+
+Required status and feedback are always readable.
+
+CC-010 / P1
+
+Package and run on two PCs.
+
+Packaged builds connect and complete the end-to-end match.
+
+CC-011 / P1
+
+Polish critical audio, lights, signage and result screen.
+
+Horror feedback improves clarity without causing frame or network regressions.
+
+Working agreement for AI agents
+
+Inspect first; do not overwrite project configuration without explaining the impact.
+
+Use actual tools exposed by the connected MCP server. Never invent tool names or report unverified success.
+
+After each ticket, list files/assets changed, build result, exact test performed, known failures and the next blocker.
+
+Commit or back up every known-good vertical slice before large changes.
+
+DEFINITION OF DONE13. QA and Acceptance Checklist
+
+A feature is not complete because an agent generated code. It is complete when the packaged or editor-run game passes an observable test. Use PASS, FAIL or NOT TESTED during the final demo rehearsal.
+
+ID
+
+TEST
+
+EXPECTED RESULT
+
+QA-01
+
+Two players join the same online session from separate PCs.
+
+Both are in same match; status confirms connection.
+
+QA-02
+
+Move, jump and interact from each PC.
+
+Both clients see correct replicated character movement.
+
+QA-03
+
+Wait for role transfer.
+
+At each 120-second round boundary, roles invert consistently.
+
+QA-04
+
+Guest interacts outside valid range.
+
+Server rejects request; objective state stays unchanged.
+
+QA-05
+
+Warden triggers trap with sufficient energy.
+
+Trap activates on both clients; warning and result are consistent.
+
+QA-06
+
+Warden tries ability during cooldown / without energy.
+
+Server rejects request and HUD explains why.
+
+QA-07
+
+Guest completes main objective.
+
+Round win is recorded once; score displays correctly.
+
+QA-08
+
+Guest fails before timer expires.
+
+Timer expiry resolves Warden win once; roles then change.
+
+QA-09
+
+Complete all three arenas.
+
+Maps load and contain functional objectives and mechanisms.
+
+QA-10
+
+Complete four rounds.
+
+Each player played both roles twice; final result uses correct score.
+
+QA-11
+
+Player disconnects mid-round.
+
+Remaining player receives clear forfeit/error state; no soft lock.
+
+QA-12
+
+Launch packaged game, not only editor PIE.
+
+Build starts, connects and completes match on demo hardware.
+
+Definition of done
+
+All PS02 compulsory requirements pass in the packaged build or are explicitly flagged as not met.
+
+No known blocker prevents a complete two-player match from starting, switching roles, scoring or reaching results.
+
+Build is backed up; team can repeat the demo steps without developer-only setup.
+
+Demo evidence distinguishes tested internet play from LAN/local test results.
+
+DELIVERY AND JUDGING14. Risks and PS02 Traceability
+
+Top risks
+
+RISK
+
+IMPACT
+
+MITIGATION
+
+Internet session setup slips
+
+Core two-player demo may fail.
+
+Validate provider and cross-PC connection in first four hours; use explicit contingency decision.
+
+MCP cannot perform required editor action
+
+Agent workflow stalls.
+
+Verify tool inventory first; switch to supported manual editor step or source-code edit.
+
+Replication desynchronizes role/mechanism state
+
+Game becomes unfair or unplayable.
+
+Keep all consequential state server-authoritative; run two-client tests after each feature.
+
+Three arenas consume too much time
+
+Compulsory stage count missed.
+
+Build compact blockouts and reuse mechanism actors; visuals last.
+
+Warden has dominant ability
+
+Match becomes one-sided.
+
+Energy, cooldowns, warnings, route counterplay and point caps; test both players in both roles.
+
+Story scope expands
+
+Core game incomplete.
+
+Deliver lore through props and brief transmissions; no cinematic scenes in MVP.
+
+PS02 requirement mapping
+
+OFFICIAL REQUIREMENT
+
+DREADLOCK IMPLEMENTATION
+
+EVIDENCE
+
+Two-player gameplay; local or online
+
+Two human players; online host/join target.
+
+Two separate PCs complete a match.
+
+Distinct Objective Runner and Saboteur roles
+
+Guest/Runner and Warden/Saboteur.
+
+Role-specific controls and HUD.
+
+Interactive traps, obstacles and environmental mechanisms
+
+Doors, lights, floor pulse, moving platform, vents and power routing.
+
+At least three tested interactions; preferably across each arena.
+
+Strategic decisions and resource management
+
+Warden energy/cooldowns; Guest route choices and counterplay.
+
+UI and gameplay test showing limited-use abilities.
+
+Minimum three playable arenas/stages
+
+Entry Vault, Living Foundry, Observatory.
+
+All three load and are playable.
+
+Role switching after each round
+
+Server swaps players at 120-second round boundary.
+
+QA-03 and QA-10 pass.
+
+Limited sabotage abilities
+
+Energy cost, cooldown and validation.
+
+Invalid calls are rejected by server.
+
+Timer- or points-based scoring
+
+120-second rounds, round wins and points.
+
+Correct end-of-round and final score.
+
+Clear win/loss, round restart and final result
+
+Guest objective win, Warden containment win, restart/rematch and results.
+
+QA-07 to QA-12 pass.
+
+PRESENTATION-READY15. Pitch, First Demo and Glossary
+
+One-sentence pitch
+
+DREADLOCK
+
+A two-player asymmetric supernatural horror game set inside a facility built by a vanished civilization. One player races through shifting chambers while the other controls traps from a sealed surveillance room. Every 120 seconds, the facility swaps their roles, forcing both players to master escape and sabotage to earn freedom.
+
+30-second judge pitch
+
+“DREADLOCK turns the building itself into the opponent. Two players are trapped in a supernatural facility built by a vanished civilization. One explores and completes objectives; the other controls the environment through cameras, doors, lights and traps. Every two minutes, they switch roles, so neither player can win by mastering only one side. Three compact arenas, limited sabotage energy and a server-controlled scoring system create a fast, replayable mind game.”
+
+First 90 seconds of a live demo
+
+Show both players connected from separate computers. Identify Guest and Warden clearly.
+
+As Guest, approach the first objective and start interacting.
+
+As Warden, use one visible sabotage mechanism. Show the Guest receive a warning and choose counterplay.
+
+Show the timer and role transfer. Demonstrate that the same player now controls the opposite role.
+
+Finish by showing the arena selection and scoring/results interface. Do not claim untested features.
+
+Glossary
+
+TERM
+
+MEANING
+
+Guest / Runner
+
+Player physically navigating the arena and completing escape objectives.
+
+Warden / Saboteur
+
+Player operating the control room and changing environmental conditions.
+
+Crucible
+
+Name used by captives for the mysterious facility.
+
+Architects
+
+Placeholder name for the vanished civilization that built the facility.
+
+Covenant Engine
+
+Supernatural system that alternates the two roles every round.
+
+Round
+
+A fixed 120-second role window; a decisive objective can lock the result before the role swap.
+
+Match
+
+Four rounds, with two Guest rounds and two Warden rounds per player.
+
+MVP
+
+Minimum viable prototype: smallest build that demonstrates the full required gameplay loop.
+
+Document status: concept baseline for team review. Treat mechanics marked “provisional” as tuning values; treat PS02 requirements as acceptance constraints.
